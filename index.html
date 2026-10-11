@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="ur" dir="rtl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#176b45"><meta name="description" content="کھیتی باڑی، زمین، فصل، اخراجات اور آمدنی کا حساب">
+<link rel="manifest" href="manifest.json"><link rel="stylesheet" href="style.css">
+<title>Rana Farm Khata | رانا فارم کھاتہ</title>
+</head>
+<body>
+<header class="topbar">
+  <div><div class="brand" id="brandName">Rana Farm Khata</div><div class="subbrand">زرعی حساب کتاب کا نظام</div></div>
+  <div class="top-actions"><button id="installBtn" class="secondary hidden">ایپ انسٹال کریں</button><button id="exportBtn" class="secondary">بیک اپ ڈاؤن لوڈ</button><label class="secondary import-label">بیک اپ واپس لائیں<input type="file" id="importFile" accept=".json" hidden></label></div>
+</header>
+<div class="notice" id="storageNotice">آپ کا ریکارڈ اس ڈیوائس میں محفوظ ہو رہا ہے۔ مستقل حفاظت کے لیے باقاعدہ بیک اپ ڈاؤن لوڈ کریں۔</div>
+<main>
+<nav class="tabs" aria-label="حصے">
+<button class="tab active" data-view="dashboard">ڈیش بورڈ</button><button class="tab" data-view="fields">زمینیں / پیلیاں</button><button class="tab" data-view="expenses">اخراجات درج کریں</button><button class="tab" data-view="sales">فصل کی فروخت</button><button class="tab" data-view="ledger">آڑھت / ادھار کھاتے</button><button class="tab" data-view="reports">مجموعی رپورٹ</button><button class="tab" data-view="settings">ترتیبات</button>
+</nav>
+<section id="dashboard" class="view">
+<h1>ڈیش بورڈ</h1><p class="muted">تمام زمینوں اور فصلوں کا خلاصہ ایک جگہ۔</p>
+<div class="cards">
+<div class="card"><span>کل زمینیں</span><strong id="kpiFields">0</strong></div>
+<div class="card"><span>کل رقبہ (ایکڑ)</span><strong id="kpiAcres">0</strong></div>
+<div class="card"><span>کل اخراجات</span><strong id="kpiExpenses">روپے 0</strong></div>
+<div class="card"><span>کل فروخت</span><strong id="kpiSales">روپے 0</strong></div>
+<div class="card"><span>منافع / نقصان</span><strong id="kpiProfit">روپے 0</strong></div>
+<div class="card"><span>باقی لین دین</span><strong id="kpiDue">روپے 0</strong></div>
+</div>
+<div class="panel"><div class="panel-head"><h2>ہر پیلی کا حساب</h2><button class="primary" data-go="fields">+ نئی پیلی</button></div><div id="fieldSummary"></div></div>
+<div class="panel"><h2>حالیہ اندراجات</h2><div id="recentEntries"></div></div>
+</section>
+<section id="fields" class="view hidden">
+<h1>زمینیں / پیلیاں</h1><p class="muted">ہر پیلی کا نام اپنی مرضی سے لکھیں۔ اپنی یا ٹھیکے والی زمین منتخب کریں۔</p>
+<form id="fieldForm" class="form-grid panel">
+<input type="hidden" id="fieldId"><label>پیلی / زمین کا نام<input id="fieldName" required placeholder="مثلاً نہر والی پیلی"></label>
+<label>رقبہ (ایکڑ)<input id="fieldAcres" type="number" min="0" step="0.01" required></label>
+<label>ملکیت<select id="fieldOwnership"><option value="اپنی">اپنی زمین</option><option value="ٹھیکہ">ٹھیکے والی زمین</option></select></label>
+<label>فی ایکڑ ٹھیکہ (روپے)<input id="fieldRent" type="number" min="0" step="0.01" value="0"></label>
+<label>موجودہ فصل<input id="fieldCrop" placeholder="مثلاً گندم، چاول، مکئی"></label>
+<label>سیزن / سال<input id="fieldSeason" placeholder="مثلاً ربیع 2026"></label>
+<div class="form-actions"><button class="primary" type="submit">زمین محفوظ کریں</button><button class="secondary" type="button" id="cancelField">صاف کریں</button></div>
+</form><div class="panel"><h2>درج شدہ زمینیں</h2><div id="fieldsTable"></div></div>
+</section>
+<section id="expenses" class="view hidden">
+<h1>نیا خرچہ درج کریں</h1><p class="muted">خرچہ منتخب پیلی اور فصل کے ساتھ محفوظ ہوگا۔</p>
+<form id="expenseForm" class="form-grid panel">
+<label>تاریخ<input id="expDate" type="date" required></label><label>پیلی / زمین<select id="expField" required></select></label>
+<label>فصل<input id="expCrop" placeholder="مثلاً گندم"></label>
+<label>خرچے کی قسم<select id="expCategory"><option>بیج</option><option>کھاد</option><option>اسپرے / زرعی ادویات</option><option>ڈیزل / ایندھن</option><option>ٹریکٹر / ہل</option><option>پانی / موٹر / بجلی</option><option>مزدوری</option><option>تنخواہ</option><option>پٹر / ٹیوب ویل</option><option>کٹائی / ہارویسٹنگ</option><option>تھریشر / گہائی</option><option>توری / پرالی</option><option>ٹرانسپورٹ</option><option>زمین کا ٹھیکہ</option><option>مشینری مرمت</option><option>آڑھت / کمیشن</option><option>دیگر</option></select></label>
+<label>تفصیل<input id="expDescription" required placeholder="کیا خریدا یا کون سا کام ہوا؟"></label><label>مقدار / نوٹ<input id="expQty" placeholder="مثلاً 10 بوریاں، 3 گھنٹے"></label>
+<label>کل رقم (روپے)<input id="expAmount" type="number" min="0.01" step="0.01" required></label><label>کس کو رقم دینی ہے؟ (اختیاری)<input id="expParty" placeholder="دکاندار / مزدور کا نام"></label>
+<label>ادائیگی کی حالت<select id="expPayment"><option value="paid">ادا کر دی</option><option value="due">ادھار / باقی</option><option value="partial">کچھ ادا کی</option></select></label><label>ادا شدہ رقم<input id="expPaid" type="number" min="0" step="0.01" value="0"></label>
+<div class="form-actions"><button class="primary" type="submit">خرچہ محفوظ کریں</button></div></form>
+<div class="panel"><h2>اخراجات کی فہرست</h2><div class="filters"><label>پیلی<select id="filterExpenseField"><option value="">تمام زمینیں</option></select></label><label>قسم<select id="filterExpenseCategory"><option value="">تمام اقسام</option></select></label></div><div id="expensesTable"></div></div>
+</section>
+<section id="sales" class="view hidden">
+<h1>فصل کی فروخت / آمدنی</h1>
+<form id="saleForm" class="form-grid panel">
+<label>تاریخ<input id="saleDate" type="date" required></label><label>پیلی / زمین<select id="saleField" required></select></label><label>فصل<input id="saleCrop" required placeholder="مثلاً گندم"></label>
+<label>مقدار<input id="saleQty" placeholder="مثلاً 500 من"></label><label>کل فروخت کی رقم<input id="saleAmount" type="number" min="0.01" step="0.01" required></label>
+<label>آڑھتی / خریدار<input id="saleBuyer" placeholder="نام"></label><label>کمیشن / کٹوتی<input id="saleDeduction" type="number" min="0" step="0.01" value="0"></label><label>وصول شدہ رقم<input id="saleReceived" type="number" min="0" step="0.01" value="0"></label>
+<label class="wide">نوٹ<input id="saleNote" placeholder="رسید نمبر یا دوسری تفصیل"></label><div class="form-actions"><button class="primary" type="submit">فروخت محفوظ کریں</button></div>
+</form><div class="panel"><h2>فروخت کا ریکارڈ</h2><div id="salesTable"></div></div>
+</section>
+<section id="ledger" class="view hidden">
+<h1>آڑھت، ادھار اور وصولی کے کھاتے</h1>
+<form id="ledgerForm" class="form-grid panel">
+<label>تاریخ<input id="ledDate" type="date" required></label><label>شخص / دکاندار / آڑھتی<input id="ledParty" required placeholder="نام"></label>
+<label>کھاتے کی قسم<select id="ledType"><option value="payable">ہم نے دینے ہیں (ادھار)</option><option value="receivable">ہم نے لینے ہیں (وصولی)</option><option value="payment">ادائیگی / وصولی درج کریں</option></select></label>
+<label>متعلقہ پیلی<select id="ledField"><option value="">عمومی / تمام زمینیں</option></select></label><label>تفصیل<input id="ledDescription" required placeholder="مثلاً کھاد ادھار، آڑھتی سے وصولی"></label>
+<label>کل رقم<input id="ledAmount" type="number" min="0.01" step="0.01" required></label><label>ادائیگی / وصولی<input id="ledPaid" type="number" min="0" step="0.01" value="0"></label>
+<div class="form-actions"><button class="primary" type="submit">کھاتہ محفوظ کریں</button></div></form>
+<div class="panel"><h2>تمام کھاتے</h2><div id="ledgerTable"></div></div>
+</section>
+<section id="reports" class="view hidden">
+<h1>مجموعی رپورٹ</h1><p class="muted">ایک پیلی منتخب کریں یا تمام زمینوں کا مجموعی حساب دیکھیں۔</p>
+<div class="panel form-grid"><label>رپورٹ کی زمین<select id="reportField"><option value="">تمام زمینیں</option></select></label><label>فصل کا نام (اختیاری)<input id="reportCrop" placeholder="مثلاً چاول"></label><div><button class="primary" id="runReport" type="button">رپورٹ دکھائیں</button></div></div>
+<div class="cards" id="reportCards"></div><div class="panel"><h2>قسم کے لحاظ سے خرچہ</h2><div id="categoryReport"></div></div><div class="panel"><h2>اس رپورٹ کی فروخت</h2><div id="reportSales"></div></div>
+</section>
+<section id="settings" class="view hidden">
+<h1>ترتیبات</h1><div class="panel form-grid"><label>سافٹ ویئر کا نام<input id="settingName" value="Rana Farm Khata"></label><div><button id="saveSettings" class="primary" type="button">نام محفوظ کریں</button></div></div>
+<div class="panel"><h2>اہم ہدایات</h2><ul><li>یہ ابتدائی ورژن ریکارڈ اسی موبائل / کمپیوٹر کے براؤزر میں محفوظ کرتا ہے۔</li><li>باقاعدگی سے بیک اپ ڈاؤن لوڈ کریں اور محفوظ جگہ پر رکھیں۔</li><li>دوسرے موبائلوں کے ساتھ ایک ہی ڈیٹا شیئر کرنے کے لیے آن لائن لاگ اِن اور کلاؤڈ ڈیٹا بیس جوڑنا ہوگا۔ صرف ویب سائٹ انٹرنیٹ پر ڈالنے سے مقامی ڈیٹا خود بخود شیئر نہیں ہوتا۔</li><li>ہر ادائیگی کو خرچے میں اور کھاتے میں دونوں جگہ مکمل رقم کے ساتھ درج کرتے وقت دوہرا حساب نہ بننے دیں؛ رپورٹ میں اخراجات صرف خرچ والے اندراجات سے شمار ہوتے ہیں۔</li></ul></div>
+</section>
+</main>
+<footer>Rana Farm Khata · آپ کے زرعی حساب کے لیے</footer>
+<script src="app.js"></script>
+</body></html>
